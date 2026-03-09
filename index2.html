@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Feliz Día de la Mujer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #ffb7d5; /* Fondo de la pantalla de inicio */
+            overflow: hidden;
+            touch-action: none; /* Evita cualquier scroll accidental en móviles */
+            transition: background-color 0.8s ease;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Animaciones globales */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite; }
+
+        /* Pantallas y Transiciones */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            padding: 1rem;
+        }
+        .hidden-screen {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+            z-index: 0;
+        }
+        .active-screen {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* --- ESTILOS DEL JARDÍN MÁGICO --- */
+        #screen-3 {
+            background-color: #111114; /* Fondo oscuro */
+        }
+        
+        /* Tallo Neón a prueba de fallos */
+        .stem-line {
+            width: 3px;
+            background: #39ff14;
+            box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+            transform-origin: bottom center;
+            transform: translateX(-50%);
+            animation: growUp 0.5s ease-out forwards;
+        }
+        @keyframes growUp {
+            0% { height: 0px; }
+            100% { height: var(--target-height); }
+        }
+
+        /* Animación de la flor abriéndose */
+        .flower-head {
+            transform: translate(-50%, -50%) scale(0);
+            animation: bloomAnim 0.5s ease-out 0.4s forwards; /* 0.4s de espera */
+        }
+        @keyframes bloomAnim {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(-45deg); }
+            80% { transform: translate(-50%, -50%) scale(1.2) rotate(10deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        }
+
+        /* Pétalos y centro */
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 35px;
+            border-radius: 50%;
+            top: -15px;
+            left: -10px;
+            transform-origin: bottom center;
+            opacity: 0.9;
+        }
+        .center {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            top: -8px;
+            left: -8px;
+            z-index: 2;
+        }
+
+        /* Mensajes flotantes del jardín */
+        .floating-msg {
+            position: absolute;
+            transform: translateX(-50%);
+            background: rgba(255, 47, 108, 0.9);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 15px;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(255, 47, 108, 0.6);
+            z-index: 20;
+            animation: floatUpMsg 3.5s ease-in forwards;
+        }
+        @keyframes floatUpMsg {
+            0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+            15% { opacity: 1; transform: translate(-50%, -30px) scale(1.1); }
+            25% { transform: translate(-50%, -40px) scale(1); }
+            80% { opacity: 1; transform: translate(-50%, -90px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -120px) scale(0.8); }
+        }
+        
+        /* Indicador parpadeante inferior */
+        .pulse-text {
+            animation: pulse-opacity 2s infinite;
+        }
+        @keyframes pulse-opacity {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA 0: PREPARACIÓN Y MÚSICA -->
+    <div id="screen-0" class="screen active-screen w-full">
+        <div class="bg-white/90 backdrop-blur-md rounded-[30px] p-8 shadow-2xl w-full max-w-sm text-center flex flex-col items-center">
+            <div class="text-5xl mb-4 animate-bounce">💖</div>
+            <h2 class="text-2xl font-extrabold text-[#ff2f6c] mb-4">
+                ¡Tengo un detalle para ti!
+            </h2>
+            <p class="text-gray-600 text-[15px] mb-8 font-medium">
+                Asegúrate de tener el volumen encendido... 🔊
+            </p>
+
+            <button id="btn-iniciar-todo" class="bg-[#ff2f6c] hover:bg-[#e0265c] text-white font-bold py-3.5 px-6 rounded-full w-full transition transform shadow-lg active:scale-95 text-lg">
+                Empezar Sorpresa ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 1: EL PANDA INICIAL -->
+    <div id="screen-1" class="screen hidden-screen w-full">
+        <div class="w-full max-w-sm mx-auto flex flex-col items-center animate-float">
+            <div class="relative w-48 h-40 z-0 flex justify-center">
+                <svg viewBox="0 0 200 160" class="w-full h-full drop-shadow-md">
+                    <circle cx="40" cy="50" r="28" fill="#1a1a1a" />
+                    <circle cx="160" cy="50" r="28" fill="#1a1a1a" />
+                    <path d="M 20 100 C 20 30, 180 30, 180 100 C 180 160, 20 160, 20 100 Z" fill="#ffffff" />
+                    <ellipse cx="65" cy="95" rx="18" ry="25" fill="#1a1a1a" transform="rotate(-30 65 95)" />
+                    <ellipse cx="135" cy="95" rx="18" ry="25" fill="#1a1a1a" transform="rotate(30 135 95)" />
+                    <path d="M 65 85 Q 75 80 70 95 Q 60 95 65 85 Z" fill="#ffffff" />
+                    <path d="M 135 85 Q 125 80 130 95 Q 140 95 135 85 Z" fill="#ffffff" />
+                    <ellipse cx="100" cy="125" rx="8" ry="5" fill="#1a1a1a" />
+                </svg>
+            </div>
+
+            <div class="bg-white rounded-[40px] p-8 shadow-xl z-10 w-full text-center relative -mt-8 pb-12">
+                <div class="absolute top-12 -left-3 w-8 h-14 bg-[#1a1a1a] rounded-r-full rounded-l-md"></div>
+                <div class="absolute top-12 -right-3 w-8 h-14 bg-[#1a1a1a] rounded-l-full rounded-r-md"></div>
+
+                <h1 class="text-[22px] font-bold text-[#ff2f6c] mb-3 leading-tight tracking-wide">
+                    Feliz Día de la Mujer 🌸
+                </h1>
+                <p class="text-gray-500 text-[15px] mb-8 px-2 font-semibold">
+                    Hoy y siempre, el mundo es más hermoso porque tú estás en él.<br>
+                    Un pequeño detalle para ti ✨
+                </p>
+
+                <button id="btn-toca-aqui" class="bg-[#ff2f6c] hover:bg-[#e0265c] text-white font-bold py-3.5 px-6 rounded-full w-full transition transform shadow-lg active:scale-95 animate-pulse-soft text-lg z-20 relative">
+                    Toca aquí 💝
+                </button>
+
+                <!-- Patitas inferiores -->
+                <div class="absolute -bottom-8 left-4 w-16 h-24 bg-[#1a1a1a] rounded-full flex flex-col items-center justify-end pb-3 gap-1 shadow-md transform -rotate-12">
+                    <div class="flex gap-1">
+                        <div class="w-3 h-4 bg-[#333] rounded-full"></div>
+                        <div class="w-3 h-5 bg-[#333] rounded-full -mt-2"></div>
+                        <div class="w-3 h-4 bg-[#333] rounded-full"></div>
+                    </div>
+                    <div class="w-8 h-8 bg-[#333] rounded-full mt-1"></div>
+                </div>
+                <div class="absolute -bottom-8 right-4 w-16 h-24 bg-[#1a1a1a] rounded-full flex flex-col items-center justify-end pb-3 gap-1 shadow-md transform rotate-12">
+                    <div class="flex gap-1">
+                        <div class="w-3 h-4 bg-[#333] rounded-full"></div>
+                        <div class="w-3 h-5 bg-[#333] rounded-full -mt-2"></div>
+                        <div class="w-3 h-4 bg-[#333] rounded-full"></div>
+                    </div>
+                    <div class="w-8 h-8 bg-[#333] rounded-full mt-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: FUERZA Y VALENTÍA (El Pollito) -->
+    <div id="screen-2" class="screen hidden-screen w-full">
+        <div class="w-full max-w-sm mx-auto flex flex-col items-center">
+            <div class="bg-white rounded-[40px] p-8 shadow-2xl w-full text-center flex flex-col items-center">
+                
+                <h2 class="text-[22px] font-extrabold text-[#e11d48] mb-6">
+                    Eres fuerza y valentía 🌷
+                </h2>
+                
+                <svg viewBox="0 0 200 220" class="w-48 h-52 drop-shadow-lg mb-6 animate-float">
+                    <line x1="85" y1="170" x2="75" y2="200" stroke="#d97706" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="115" y1="170" x2="125" y2="200" stroke="#d97706" stroke-width="6" stroke-linecap="round"/>
+                    <ellipse cx="70" cy="205" rx="14" ry="6" fill="#d97706" />
+                    <ellipse cx="130" cy="205" rx="14" ry="6" fill="#d97706" />
+                    <ellipse cx="100" cy="120" rx="45" ry="55" fill="#fef08a" />
+                    <circle cx="100" cy="70" r="40" fill="#fef08a" />
+                    <path d="M 90 30 Q 100 0 110 30 Q 120 15 120 35" fill="#e11d48"/>
+                    <path d="M 60 110 C 60 95, 140 95, 140 110 L 138 150 L 62 150 Z" fill="#4ade80" />
+                    <path d="M 62 150 L 138 150 L 133 175 L 100 165 L 67 175 Z" fill="#78350f" />
+                    <circle cx="82" cy="65" r="14" stroke="#059669" stroke-width="3.5" fill="none" />
+                    <circle cx="118" cy="65" r="14" stroke="#059669" stroke-width="3.5" fill="none" />
+                    <line x1="96" y1="65" x2="104" y2="65" stroke="#059669" stroke-width="3" />
+                    <circle cx="82" cy="65" r="4" fill="#111" />
+                    <circle cx="118" cy="65" r="4" fill="#111" />
+                    <polygon points="95,75 105,75 100,85" fill="#f59e0b" />
+                    <path d="M 60 120 Q 40 130 55 145" stroke="#fef08a" stroke-width="8" stroke-linecap="round" fill="none"/>
+                    <path d="M 140 120 Q 160 100 175 110" stroke="#fef08a" stroke-width="8" stroke-linecap="round" fill="none"/>
+                </svg>
+
+                <p class="text-gray-600 text-[15px] mb-8 px-2 font-medium leading-relaxed">
+                    Tu forma de ser y tu valentía me inspiran muchísimo... <br>
+                    gracias por ser tan increíble 🌺
+                </p>
+
+                <button id="btn-siguiente" class="bg-[#ff2f6c] hover:bg-[#e0265c] text-white font-bold py-3.5 px-8 rounded-full w-full transition transform shadow-lg active:scale-95 text-lg">
+                    Siguiente ✨
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: EL JARDÍN INTERACTIVO -->
+    <div id="screen-3" class="screen hidden-screen">
+        
+        <button id="btn-volver" class="absolute top-8 left-1/2 transform -translate-x-1/2 bg-[#ff2f6c]/20 border border-[#ff2f6c] text-[#ff2f6c] backdrop-blur-md px-6 py-2 rounded-full font-bold z-50 flex items-center gap-2 active:scale-95 transition-transform">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Volver
+        </button>
+
+        <div id="garden-canvas" class="absolute inset-0 w-full h-full z-10 cursor-pointer"></div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none">
+            <div class="border border-pink-500/50 bg-black/40 backdrop-blur-sm text-pink-300 px-6 py-2 rounded-full font-medium flex items-center gap-2 shadow-[0_0_15px_rgba(255,47,108,0.3)] pulse-text text-sm w-max max-w-xs text-center">
+                <span>Toca donde quieras para florecer 🌸</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Referencias de pantallas
+        const screen0 = document.getElementById('screen-0');
+        const screen1 = document.getElementById('screen-1');
+        const screen2 = document.getElementById('screen-2');
+        const screen3 = document.getElementById('screen-3');
+        const body = document.body;
+
+        // Referencias Audio
+        const btnIniciarTodo = document.getElementById('btn-iniciar-todo');
+        
+        // 👇 AQUÍ PONES EL NOMBRE EXACTO DEL ARCHIVO DE TU CANCIÓN
+        let bgMusic = new Audio('cancion2.mp3'); 
+        bgMusic.loop = true; // Que la canción se repita
+
+        // Referencias de botones
+        const btnTocaAqui = document.getElementById('btn-toca-aqui');
+        const btnSiguiente = document.getElementById('btn-siguiente');
+        const btnVolver = document.getElementById('btn-volver');
+
+        const gardenCanvas = document.getElementById('garden-canvas');
+
+        // Frases para el jardín (Modificadas para algo más coqueto pero sin ser tan intenso)
+        const gardenPhrases = [
+            "Me encantas", "Eres genial 💛", "Me haces sonreír", "Tan linda", 
+            "Eres luz ☀️", "Única ✨", "Hermosa 🌸", "Perfecta 💕", "Te quiero muchísimo"
+        ];
+        const flowerColors = ['#ff007f', '#ff1493', '#da70d6', '#ff69b4', '#ba55d3', '#ff00ff'];
+
+        // Navegación principal
+        function changeScreen(hideScreen, showScreen, changeBgColor = null) {
+            hideScreen.classList.remove('active-screen');
+            hideScreen.classList.add('hidden-screen');
+            
+            if (changeBgColor) {
+                body.style.backgroundColor = changeBgColor;
+            }
+
+            setTimeout(() => {
+                showScreen.classList.remove('hidden-screen');
+                showScreen.classList.add('active-screen');
+            }, 500);
+        }
+
+        // Botón Pantalla 0 -> Pantalla 1
+        btnIniciarTodo.addEventListener('click', () => {
+            // Intentar reproducir música automáticamente
+            if (bgMusic.src) {
+                bgMusic.play().catch(e => console.log("Auto-play prevenido por el navegador", e));
+            }
+            changeScreen(screen0, screen1, '#e89dc8');
+        });
+
+        btnTocaAqui.addEventListener('click', () => changeScreen(screen1, screen2));
+        btnSiguiente.addEventListener('click', () => changeScreen(screen2, screen3, '#111114'));
+        btnVolver.addEventListener('click', () => {
+            changeScreen(screen3, screen1, '#e89dc8');
+            setTimeout(() => { gardenCanvas.innerHTML = ''; }, 600); // Limpiar jardín al salir
+        });
+
+        // --- LÓGICA DEL JARDÍN 100% A PRUEBA DE FALLOS ---
+        let lastTapTime = 0;
+
+        function handleGardenTouch(e) {
+            if(e.target.closest('#btn-volver')) return;
+
+            let now = Date.now();
+            if (now - lastTapTime < 100) return;
+            lastTapTime = now;
+
+            let x = 0;
+            let y = 0;
+            
+            if (e.type === 'touchstart') {
+                x = e.touches[0].clientX;
+                y = e.touches[0].clientY;
+            } else {
+                x = e.clientX;
+                y = e.clientY;
+            }
+
+            const stemHeight = window.innerHeight - y;
+            const color = flowerColors[Math.random() * flowerColors.length | 0];
+            const phrase = gardenPhrases[Math.random() * gardenPhrases.length | 0];
+
+            // 1. Crear Tallo
+            const stem = document.createElement('div');
+            stem.className = 'stem-line absolute pointer-events-none z-10';
+            stem.style.left = `${x}px`; 
+            stem.style.bottom = `0px`; 
+            stem.style.setProperty('--target-height', `${stemHeight}px`); 
+            gardenCanvas.appendChild(stem);
+
+            // 2. Crear Flor
+            const flower = document.createElement('div');
+            flower.className = 'flower-head absolute pointer-events-none z-20';
+            flower.style.left = `${x}px`;
+            flower.style.top = `${y}px`;
+
+            let petalsHTML = '';
+            for(let i = 0; i < 5; i++) {
+                let rot = i * 72;
+                petalsHTML += `<div class="petal" style="transform: rotate(${rot}deg) translateY(-12px); background: ${color}; box-shadow: 0 0 15px ${color}"></div>`;
+            }
+            petalsHTML += `<div class="center" style="background: #fff; box-shadow: 0 0 10px #fff"></div>`;
+            
+            flower.innerHTML = petalsHTML;
+            gardenCanvas.appendChild(flower);
+
+            // 3. Crear Mensaje Flotante
+            const msg = document.createElement('div');
+            msg.className = 'floating-msg';
+            msg.style.left = `${x}px`;
+            msg.style.top = `${y - 30}px`; 
+            msg.innerText = phrase;
+            gardenCanvas.appendChild(msg);
+
+            // 4. Limpieza
+            setTimeout(() => {
+                if (gardenCanvas.contains(msg)) gardenCanvas.removeChild(msg);
+            }, 3500);
+        }
+
+        gardenCanvas.addEventListener('touchstart', handleGardenTouch);
+        gardenCanvas.addEventListener('mousedown', handleGardenTouch);
+
+    </script>
+</body>
+</html>
